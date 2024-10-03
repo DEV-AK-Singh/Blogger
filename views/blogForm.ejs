@@ -1,0 +1,87 @@
+<%- include('partials/header.ejs') %> 
+<%- include('partials/navigation.ejs') %>
+<h1>Blog Form</h1>
+<form>
+  <label for="title">Title</label><br />
+  <input type="text" name="title" id="title" value="<%- blog?.title %>" /><br />
+  <label for="tags">Tags</label><br />
+  <input type="text" name="tags" id="tags" value="<%- blog?.tags %>" placeholder="Tags with comma separated"/><br />
+  <label for="body">Body</label><br />
+  <textarea name="body" id="body" cols="30" rows="10"><%- blog?.body %></textarea><br />
+  <%if (blog?._id) { %>
+  <input id="updateForm" type="submit" value="Update" />
+  <%} else { %>
+  <input id="submitForm" type="submit" value="Create" />
+  <%} %>
+</form>
+<script>
+  const form = document.querySelector("form");
+  const blogId = "<%= blog?._id %>";
+  if (!blogId) {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const user = JSON.parse(localStorage.getItem("user"));
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      fetch("/api/blogs/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          ...data,
+          author: user._id,
+          tags: data.tags.split(","),
+          blogDate: new Date(),
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          alert("Blog has been created..");
+          window.location.href = `/blogs/${blogId}`;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    });
+  } else {
+    const authorId = "<%= blog?.author._id %>";
+    const userId = JSON.parse(localStorage.getItem("user"))._id;
+    if (authorId !== userId) {
+        document.querySelector("#updateForm").style.display = "none";
+        alert("You are not authorized to update this blog");
+        window.location.href = `/blogs/${blogId}`;
+    }
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const user = JSON.parse(localStorage.getItem("user"));
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      fetch(`/api/blogs/${blogId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          ...data,
+          author: user._id,
+          tags: data.tags.split(","),
+          blogDate: new Date(),
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          alert("Blog has been updated..");
+          window.location.href = `/blogs/${blogId}`;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    });
+  }
+</script>
+<%- include('partials/footer.ejs') %>

@@ -1,0 +1,15 @@
+<%- include('partials/header.ejs') %> 
+<%- include('partials/navigation.ejs') %>
+<h1>All Blogs</h1>
+<% for (const blog of blogs) { %>
+    <div style="border: 2px solid black; padding: 20px">
+        <h2><%= blog.title %></h2>
+        <p><%= blog.body %></p>
+        <p><%= blog.author.name %></p>
+        <p><%= blog.blogDate %></p>
+        <p>Tags: </p>
+        <ul><% for (const tag of blog.tags) { %> <li><%= tag %></li> <% } %></ul>
+        <a href="/blogs/<%= blog._id %>">View</a>
+    </div>
+<% } %>
+<%- include('partials/footer.ejs') %>

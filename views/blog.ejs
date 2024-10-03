@@ -1,0 +1,48 @@
+<%- include('partials/header.ejs') %> 
+<%- include('partials/navigation.ejs') %>
+<h1>Blog Details</h1>
+<hr>
+<div style="border: 2px solid black; padding: 20px">
+    <h2><%= blog.title %></h2>
+    <p><%= blog.body %></p>
+    <p><%= blog.author.name %></p>
+    <p><%= blog.blogDate %></p>
+    <p>Tags: </p>
+    <ul><% for (const tag of blog.tags) { %> <li><%= tag %></li> <% } %></ul>
+    <button id="updateBtn" type="button" onclick="updateBlog('<%= blog._id %>')">Update</button>
+    <button id="deleteBtn" type="button" onclick="deleteBlog('<%= blog._id %>')">Delete</button>
+</div>
+<script>
+    const authorId = "<%= blog?.author._id %>";
+    const userId = JSON.parse(localStorage.getItem("user"))._id;
+    if (authorId !== userId) {
+        document.querySelector("#updateBtn").style.display = "none";
+        document.querySelector("#deleteBtn").style.display = "none";
+    }
+
+    function updateBlog(id) {
+        console.log("blogId", id);
+        window.location.href = `/blogs/${id}/edit`;
+    }
+
+    function deleteBlog(id) {
+        console.log("blogId", id);
+        fetch(`/api/blogs/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token"),
+            },
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log("Success:", data);
+            alert("Blog has been deleted..");
+            window.location.href = "/blogs";    
+        }).catch((error) => {
+            console.error("Error:", error);
+            alert("Something went wrong..");
+        });
+    }
+</script>
+<%- include('partials/footer.ejs') %>

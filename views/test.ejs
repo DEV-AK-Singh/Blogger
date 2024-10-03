@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home | <%= title %></title>
+  </head>
+
+  <body>
+    Home <%= name %> <%= id %>
+    <!-- Will show on server side -->
+    <%= console.log(name) %>
+
+    <br />
+    <br />
+
+    <% let i = 110; %> i = <%= i %> <br />
+    <% if (i > 10) { %> This will show only if value of i is greater than 10 <%
+    } %>
+
+    <br />
+    <br />
+
+    <% let age = 2; %> age = <%= age %> 
+    <% if (age > 10) { %>
+        <p>Age is greater than 10</p>
+    <% } else if (age < 10) { %>
+        <p>Age is less than 10</p>
+    <% } else { %>
+        <p>Age is equal to 10</p>
+    <% } %>
+
+    <br />
+    <br />
+
+    <% for (let i = 0; i < 10; i++) { %> Hi I am loop number <%= i %> <br /> <% } %>
+  </body>
+</html>

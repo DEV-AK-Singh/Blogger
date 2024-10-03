@@ -1,0 +1,24 @@
+<script>
+    if (!localStorage.getItem("token") && window.location.pathname !== "/auth") {
+        console.log("Token not found");
+        window.location.href = "/auth";
+    }
+    
+    if (localStorage.getItem("token") && window.location.pathname == "/auth") {
+        console.log("Token found");
+        window.location.href = "/";
+    }
+
+    function addBlog() {
+        window.location.href = "/blogs/create";
+    }
+
+    function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "/auth";
+    }
+
+</script>
+</body>
+</html>
