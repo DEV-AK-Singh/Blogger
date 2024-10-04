@@ -1,6 +1,8 @@
 
 # Blogger
 
+## Project Overview
+
 This Blogger is a simple web application built using EJS, Express.js, MongoDB, and Node.js. The app allows users to create, read, update, and delete blog posts.
 
 ## Features
